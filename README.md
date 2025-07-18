@@ -3,9 +3,10 @@
 Attendance Service adalah bagian dari **arsitektur microservices** untuk aplikasi **Absensi WFH**.  
 Service ini berfungsi untuk mengelola seluruh data absensi karyawan, termasuk:
 
-✅ Menerima & menyimpan data absensi (check-in & check-out) beserta bukti foto  
+✅ Menerima & menyimpan data absensi (clock-in) beserta bukti foto  
 ✅ Menyediakan riwayat absensi untuk masing-masing karyawan  
-✅ Memungkinkan admin melihat & mengelola data absensi seluruh karyawan
+✅ Memungkinkan admin melihat data absensi secara keseluruhan
+✅ Memungkinkan admin mengelola data karyawan
 
 ---
 
@@ -25,8 +26,8 @@ Service ini berfungsi untuk mengelola seluruh data absensi karyawan, termasuk:
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/ihsanmarseno/user-service.git
-cd /user-service
+git clone https://github.com/ihsanmarseno/attendance-service.git
+cd /attendance-service
 ```
 
 ### 2. Install Dependencies
