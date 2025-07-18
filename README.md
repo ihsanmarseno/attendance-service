@@ -5,10 +5,10 @@
 Attendance Service adalah bagian dari **arsitektur microservices** untuk aplikasi **Absensi WFH**.  
 Service ini berfungsi untuk mengelola seluruh data absensi karyawan, termasuk:
 
-✅ Menerima & menyimpan data absensi (clock-in) beserta bukti foto  
-✅ Menyediakan riwayat absensi untuk masing-masing karyawan  
-✅ Memungkinkan admin melihat data absensi secara keseluruhan
-✅ Memungkinkan admin mengelola data karyawan
+- Menerima & menyimpan data absensi (clock-in) beserta bukti foto  
+- Menyediakan riwayat absensi untuk masing-masing karyawan  
+- Memungkinkan admin melihat data absensi secara keseluruhan
+- Memungkinkan admin mengelola data karyawan
 
 ---
 
