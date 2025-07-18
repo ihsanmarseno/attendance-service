@@ -1,5 +1,7 @@
 # 🗓️ Attendance Service
 
+![alt text](image.png)
+
 Attendance Service adalah bagian dari **arsitektur microservices** untuk aplikasi **Absensi WFH**.  
 Service ini berfungsi untuk mengelola seluruh data absensi karyawan, termasuk:
 
