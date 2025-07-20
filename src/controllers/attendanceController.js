@@ -86,15 +86,19 @@ export const getAllAttendance = async (req, res) => {
     whereCondition.clockInTime = { gte: start, lte: end };
   } else if (filter === "thisWeek") {
     const now = new Date();
+    const dayOfWeek = now.getDay();
+
     const firstDay = new Date(now);
-    firstDay.setDate(now.getDate() - now.getDay());
+    const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    firstDay.setDate(now.getDate() - diffToMonday);
     firstDay.setHours(0, 0, 0, 0);
-    const lastDay = new Date(now);
-    lastDay.setDate(now.getDate() + (6 - now.getDay()));
+
+    const lastDay = new Date(firstDay);
+    lastDay.setDate(firstDay.getDate() + 6);
     lastDay.setHours(23, 59, 59, 999);
+
     whereCondition.clockInTime = { gte: firstDay, lte: lastDay };
   }
-
   try {
     const allAttendances = await prisma.attendance.findMany({
       where: whereCondition,
