@@ -8,7 +8,6 @@ export const clockIn = async (req, res) => {
     return res.status(400).json({ msg: "Foto bukti wajib diunggah" });
   }
 
-  // URL yang akan disimpan di database dan diakses oleh frontend
   const photoUrl = `/uploads/${req.file.filename}`;
 
   try {
@@ -78,7 +77,6 @@ export const getAllAttendance = async (req, res) => {
   const pageSize = parseInt(req.query.pageSize) || 10;
   const skip = (page - 1) * pageSize;
 
-  // filter date
   let whereCondition = {};
   if (filter === "today") {
     const start = new Date();
@@ -98,63 +96,44 @@ export const getAllAttendance = async (req, res) => {
   }
 
   try {
-    // ambil total & attendance dulu
-    const [totalItems, attendances] = await Promise.all([
-      prisma.attendance.count({ where: whereCondition }),
-      prisma.attendance.findMany({
-        where: whereCondition,
-        orderBy: { clockInTime: "desc" },
-        skip,
-        take: pageSize,
-      }),
-    ]);
+    const allAttendances = await prisma.attendance.findMany({
+      where: whereCondition,
+      orderBy: { clockInTime: "desc" },
+    });
 
-    // fetch user untuk tiap attendance
     const enriched = await Promise.all(
-      attendances.map(async (a) => {
-        // fetch user detail
+      allAttendances.map(async (a) => {
         let userData = null;
         try {
           const userRes = await axios.get(
-            `${process.env.USER_SERVICE_URL}/auth/users/${a.userId}`,
-            {
-              headers: {
-                Authorization: `${req.headers.authorization}`,
-              },
-            }
+            `${process.env.USER_SERVICE_URL}/v1/api/auth/users/${a.userId}`,
+            { headers: { Authorization: `${req.headers.authorization}` } }
           );
-
           userData = userRes.data.user;
         } catch (err) {
-          console.log(err);
           console.error("Failed fetch user:", a.userId, err.message);
         }
 
-        // hitung status Late
         const clock = new Date(a.clockInTime);
-        const hour = clock.getHours();
-
         return {
           id: a.id,
           clockInTime: a.clockInTime,
           photoUrl: a.photoUrl,
-          status: hour >= 8 ? "Late" : "On Time",
-          user: userData
-            ? {
-                id: userData.id,
-                name: userData.name,
-                email: userData.email,
-                role: userData.role,
-                createdAt: userData.createdAt,
-                updatedAt: userData.updatedAt,
-              }
-            : null,
+          status: clock.getHours() >= 8 ? "Late" : "On Time",
+          user: userData,
         };
       })
     );
 
+    const employeeAttendances = enriched.filter(
+      (a) => a.user && a.user.role === "employee"
+    );
+
+    const totalItems = employeeAttendances.length;
+    const paginatedData = employeeAttendances.slice(skip, skip + pageSize);
+
     res.json({
-      data: enriched,
+      data: paginatedData,
       meta: {
         totalItems,
         totalPages: Math.ceil(totalItems / pageSize),

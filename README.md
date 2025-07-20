@@ -5,8 +5,8 @@
 Attendance Service adalah bagian dari **arsitektur microservices** untuk aplikasi **Absensi WFH**.  
 Service ini berfungsi untuk mengelola seluruh data absensi karyawan, termasuk:
 
-- Menerima & menyimpan data absensi (clock-in) beserta bukti foto  
-- Menyediakan riwayat absensi untuk masing-masing karyawan  
+- Menerima & menyimpan data absensi (clock-in) beserta bukti foto
+- Menyediakan riwayat absensi untuk masing-masing karyawan
 - Memungkinkan admin melihat data absensi secara keseluruhan
 - Memungkinkan admin mengelola data karyawan
 
@@ -44,6 +44,7 @@ npm install
 DATABASE_URL="mysql://root:@localhost:3306/attendance-service"
 JWT_SECRET="JWTSECRETDUMMY"
 PORT=5002
+USER_SERVICE_URL="http://localhost:5001"
 ```
 
 ### 4. Running Migrasi Prisma
